@@ -45,7 +45,7 @@ target_compile_options(${PROJECT_NAME} PRIVATE
   -Wstrict-overflow=4
 
   # Harden stack and heap
-  -fstack-protector-strong
+  -fstack-protector-all
   -fstack-clash-protection
 
   # No undefined/uninitialized behavior
