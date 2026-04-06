@@ -110,12 +110,14 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
 endif()
 
 # ─────────────────────────────────────────────
-#  Optional: enable clang-tidy on build
-#  Uncomment if clang-tidy is installed
+#  if clang-tidy is installed run a Static analysis check
 # ─────────────────────────────────────────────
-# find_program(CLANG_TIDY clang-tidy)
-# if(CLANG_TIDY)
-#   set_target_properties(${PROJECT_NAME} PROPERTIES
-#     CXX_CLANG_TIDY "${CLANG_TIDY};-checks=modernize-*,bugprone-*,clang-analyzer-*"
-#   )
-# endif()
+
+find_program(CLANG_TIDY_EXE NAMES "clang-tidy")
+
+if(CLANG_TIDY_EXE)
+    set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE};-checks=-*,bugprone-*,modernize-*,readability-*;--warnings-as-errors=*")
+    message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
+else()
+    message(WARNING "clang-tidy not found! Static analysis will be skipped.")
+endif()
