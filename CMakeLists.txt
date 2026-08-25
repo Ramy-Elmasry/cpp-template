@@ -16,6 +16,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type (Debug|Release)" FORCE)
 endif()
+set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
+
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 # ─────────────────────────────────────────────
@@ -112,6 +114,11 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
   target_compile_definitions(${PROJECT_NAME} PRIVATE
     NDEBUG=1
   )
+
+else()
+  message(FATAL_ERROR
+    "Unsupported CMAKE_BUILD_TYPE: '${CMAKE_BUILD_TYPE}'. "
+    "Only 'Debug' and 'Release' are supported by this project.")
 endif()
 
 # ─────────────────────────────────────────────
