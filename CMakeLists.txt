@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.20)
 project(MyProject CXX)
 
+if(NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  message(FATAL_ERROR "This project requires Clang. Got: ${CMAKE_CXX_COMPILER_ID}. "
+                       "Configure with -DCMAKE_CXX_COMPILER=clang++")
+endif()
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -45,7 +50,7 @@ target_compile_options(${PROJECT_NAME} PRIVATE
   -Wstrict-overflow=4
 
   # Harden stack and heap
-  -fstack-protector-all
+  -fstack-protector-strong
   -fstack-clash-protection
 
   # No undefined/uninitialized behavior
@@ -68,7 +73,7 @@ target_link_options(${PROJECT_NAME} PRIVATE
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   target_compile_options(${PROJECT_NAME} PRIVATE
     -g3                         # Maximum debug info
-    -O0                         # No optimization (accurate backtraces)
+    -Og                         # No optimization (accurate backtraces)
     -Werror                     # Treat all warnings as errors
     -fsanitize=address          # Heap/stack overflows, use-after-free
     -fsanitize=undefined        # UB: overflow, null deref, misaligned ptr
